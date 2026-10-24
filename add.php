@@ -35,48 +35,100 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $year_level === ""
     ) {
         $error = "Please fill in all required fields.";
-    } elseif (!ctype_digit($year_level) ||
-              (int)$year_level < 1 ||
-              (int)$year_level > 6) {
+
+    } elseif (
+        !ctype_digit($year_level) ||
+        (int)$year_level < 1 ||
+        (int)$year_level > 6
+    ) {
         $error = "Please enter a valid year level.";
-    } elseif ($email !== "" && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+    } elseif (
+        $email !== "" &&
+        !filter_var($email, FILTER_VALIDATE_EMAIL)
+    ) {
         $error = "Please enter a valid email address.";
+
     } else {
-        $year_level = (int)$year_level;
-        $email = $email === "" ? null : $email;
-        $middle_name = $middle_name === "" ? null : $middle_name;
 
-        $sql = "INSERT INTO students
-                (student_number, first_name, middle_name, last_name,
-                 email, campus_branch, course, year_level)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $check_sql = "SELECT id
+                      FROM students
+                      WHERE LOWER(first_name) = LOWER(?)
+                      AND LOWER(COALESCE(middle_name, '')) = LOWER(?)
+                      AND LOWER(last_name) = LOWER(?)
+                      LIMIT 1";
 
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param(
-            "sssssssi",
-            $student_number,
+        $check_stmt = $conn->prepare($check_sql);
+
+        $check_stmt->bind_param(
+            "sss",
             $first_name,
             $middle_name,
-            $last_name,
-            $email,
-            $campus_branch,
-            $course,
-            $year_level
+            $last_name
         );
 
-        if ($stmt->execute()) {
-            $stmt->close();
-            header("Location: index.php?added=1");
-            exit;
-        }
+        $check_stmt->execute();
 
-        if ($conn->errno === 1062 || $stmt->errno === 1062) {
-            $error = "That student ID number already exists.";
+        $check_stmt->store_result();
+
+        if ($check_stmt->num_rows > 0) {
+
+        
+            $error = "This information is already in our system.";
+
+            $student_number = "";
+            $first_name = "";
+            $middle_name = "";
+            $last_name = "";
+            $email = "";
+            $campus_branch = "";
+            $course = "";
+            $year_level = "";
+
         } else {
-            $error = "Unable to save the student record. Please try again.";
+
+            $year_level = (int)$year_level;
+
+            $email = $email === "" ? null : $email;
+            $middle_name = $middle_name === "" ? null : $middle_name;
+
+            $sql = "INSERT INTO students
+                    (student_number, first_name, middle_name, last_name,
+                     email, campus_branch, course, year_level)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+            $stmt = $conn->prepare($sql);
+
+            $stmt->bind_param(
+                "sssssssi",
+                $student_number,
+                $first_name,
+                $middle_name,
+                $last_name,
+                $email,
+                $campus_branch,
+                $course,
+                $year_level
+            );
+
+            if ($stmt->execute()) {
+                $stmt->close();
+                $check_stmt->close();
+
+                header("Location: index.php?added=1");
+                exit;
+            }
+
+            if ($stmt->errno === 1062) {
+                $error = "That student ID number already exists.";
+            } else {
+                $error = "Unable to save the student record. Please try again.";
+            }
+
+            $stmt->close();
         }
 
-        $stmt->close();
+        $check_stmt->close();
     }
 }
 ?>
