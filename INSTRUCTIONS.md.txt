@@ -1,0 +1,99 @@
+# INSTRUCTIONS
+
+Soliven, Evelyn B. 
+BSIT 3-1
+
+Student Records Management System (CRUD Web Application)
+
+## PROJECT DESCRIPTION
+
+The Student Records Management System is a web-based application developed using PHP, MySQL/MariaDB, HTML and CSS. The purpose of this system is that it allows the users to manage student records through this basic CRUD (Create, Read, Update, Delete) operations.
+
+### PROJECT FEATURES 
+The system can do the following:
+- view all student records available
+- search for student records
+- add new student records
+- edit existing student information 
+- delete student records
+- store student information including student number, full name, campus branch, email, course, and year level
+
+## SYSTEM REQUIREMENTS
+- Windows, macOS or Linux
+- XAMPP with Apache and MySQL/MariaDB
+- A modern web browser
+
+## INSTALLATION AND SETUP INSTRUCTIONS
+
+### STEP 1: Install and Start XAMPP
+
+1.) Download and install XAMPP from https://www.apachefriends.org/.
+2.) Open the XAMPP Control Panel.
+3.) Start **Apache** and **MySQL**.
+
+### STEP 2: Copy the Project Folder
+1.) Download this repository from Github by clicking **Code -> Download ZIP**
+2.) Extract then copy the project file into the XAMPP 'htdocs' directory
+
+For Windows, the usual directory is:
+
+`C:\xampp\htdocs\student_records`
+
+Make sure the PHP files and the `css` folder are directly inside the `student_records` folder.
+
+### STEP 3: Create the Database
+1.) Open a browser and visit http://localhost/phpmyadmin/.
+2.) Create a new database named `student_records`.
+3.) Select the `student_records` database.
+4.) Click the **Import** tab.
+5.) Choose the provided `student_records.sql` file.
+6.) Click **Import** or **Go** to import the database structure and sample records.
+
+### STEP 4: Check the Database Connection
+Open `db.php` and verify that the database connection settings match the local XAMPP installation.
+
+The default local settings used by this project are:
+- Host: `localhost`
+- Username: `root`
+- Password: blank
+- Database: `student_records`
+
+If the local MySQL/MariaDB configuration uses a different username, password, or port, update the connection settings accordingly.
+
+### STEP 5: Run the Application
+1.) Ensure Apache and MySQL are running in XAMPP.
+2.) Open a web browser.
+3.) Visit:
+
+   http://localhost/student_records/
+
+The Student Records Management System should now be accessible.
+
+## Project File Structure
+
+student_records/
+├── index.php
+├── add.php
+├── edit.php
+├── delete.php
+├── db.php
+├── student_records.sql
+├── INSTRUCTIONS.md
+└── css/
+    └── style.css
+
+## TESTING THE APPLICATION
+The following operations can be tested:
+1.) **Create:** Add a new student record.
+2.) **Read:** View student records on the dashboard.
+3.) **Search:** Search for a student using available search terms.
+4.) **Update:** Edit an existing student's information.
+5.) **Delete:** Remove a student record.
+
+## NOTES
+- The application is designed to run locally using XAMPP.
+- GitHub stores the project files but does not automatically run the PHP application or its MySQL/MariaDB database.
+- The provided SQL file is used to recreate the database structure and import sample records.
+- The database connection settings may need to be adjusted depending on the local environment.
+
+have fun testing!
